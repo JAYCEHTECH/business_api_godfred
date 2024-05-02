@@ -1150,7 +1150,6 @@ def initiate_ishare_transaction(request):
 @authentication_classes([BearerTokenAuthentication])
 def admin_initiate_ishare_transaction(request):
     authorization_header = request.headers.get('Authorization')
-    print(authorization_header)
     if authorization_header:
         auth_type, token = authorization_header.split(' ')
         if auth_type == 'Bearer':
@@ -1181,9 +1180,6 @@ def admin_initiate_ishare_transaction(request):
                 token_key = token_obj.key
 
                 if token_key != config("TOKEN_KEY"):
-                    print(token_key == config("TOKEN_KEY"))
-                    print(config("TOKEN_KEY"))
-                    print(token_key)
                     print("token did not match")
                     return Response({'message': 'Authorisation Failed.'},
                                     status=status.HTTP_401_UNAUTHORIZED)
