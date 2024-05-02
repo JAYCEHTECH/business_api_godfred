@@ -1181,6 +1181,8 @@ def admin_initiate_ishare_transaction(request):
                 token_key = token_obj.key
 
                 if token_key != config("TOKEN_KEY"):
+                    print(config("TOKEN_KEY"))
+                    print(token_key)
                     print("token did not match")
                     return Response({'message': 'Authorisation Failed.'},
                                     status=status.HTTP_401_UNAUTHORIZED)
