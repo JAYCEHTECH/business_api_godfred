@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>simple invoice receipt email template - Bootdey.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <style type="text/css">
+      /* -------------------------------------
+    GLOBAL
+    A very basic CSS reset
+------------------------------------- */
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+        box-sizing: border-box;
+        font-size: 14px;
+      }
+
+      img {
+        max-width: 100%;
+      }
+
+      body {
+        -webkit-font-smoothing: antialiased;
+        -webkit-text-size-adjust: none;
+        width: 100% !important;
+        height: 100%;
+        line-height: 1.6;
+      }
+
+      /* Let's make sure all tables have defaults */
+      table td {
+        vertical-align: top;
+      }
+
+      /* -------------------------------------
+    BODY & CONTAINER
+------------------------------------- */
+      body {
+        background-color: #f6f8fe;
+      }
+
+      .body-wrap {
+        background-color: #f6f8fe;
+        width: 100%;
+      }
+
+      .container {
+        display: block !important;
+        max-width: 550px !important;
+        margin: 0 auto !important;
+        /* makes it centered */
+        clear: both !important;
+      }
+
+      .content {
+        max-width: 600px;
+        margin: 0 auto;
+        display: block;
+        padding: 20px;
+      }
+
+      /* -------------------------------------
+    HEADER, FOOTER, MAIN
+------------------------------------- */
+      .main {
+        background: #fff;
+        border: 1px solid #e9e9e9;
+        border-radius: 3px;
+      }
+
+
+
+      .content-block {
+        padding: 0 0 10px;
+      }
+
+      .header {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .footer {
+        width: 100%;
+        clear: both;
+        color: #999;
+        padding: 20px;
+      }
+      .footer a {
+        color: #999;
+      }
+      .footer p,
+      .footer a,
+      .footer unsubscribe,
+      .footer td {
+        font-size: 12px;
+      }
+
+      /* -------------------------------------
+    TYPOGRAPHY
+------------------------------------- */
+      h1,
+      h2,
+      h3 {
+        font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande",
+          sans-serif;
+        color: #000;
+        margin: 40px 0 0;
+        line-height: 1.2;
+        font-weight: 400;
+      }
+
+      h1 {
+        font-size: 32px;
+        font-weight: 500;
+      }
+
+      h2 {
+        font-size: 24px;
+      }
+
+      h3 {
+        font-size: 18px;
+      }
+
+      h4 {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      p,
+      ul,
+      ol {
+        margin-bottom: 10px;
+        font-weight: normal;
+      }
+      p li,
+      ul li,
+      ol li {
+        margin-left: 5px;
+        list-style-position: inside;
+      }
+
+      /* -------------------------------------
+    LINKS & BUTTONS
+------------------------------------- */
+      a {
+        color: #1ab394;
+        text-decoration: underline;
+      }
+
+      .btn-primary {
+        text-decoration: none;
+        color: #fff;
+        background-color: #1ab394;
+        border: solid #1ab394;
+        border-width: 5px 10px;
+        line-height: 2;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        display: inline-block;
+        border-radius: 5px;
+        text-transform: capitalize;
+      }
+
+      /* -------------------------------------
+    OTHER STYLES THAT MIGHT BE USEFUL
+------------------------------------- */
+      .last {
+        margin-bottom: 0;
+      }
+
+      .first {
+        margin-top: 0;
+      }
+
+      .aligncenter {
+        text-align: center;
+      }
+
+      .alignright {
+        text-align: right;
+      }
+
+      .alignleft {
+        text-align: left;
+      }
+
+      .clear {
+        clear: both;
+      }
+
+      /* -------------------------------------
+    ALERTS
+    Change the class depending on warning email, good email or bad email
+------------------------------------- */
+      .alert {
+        font-size: 16px;
+        color: #fff;
+        font-weight: 500;
+        padding: 20px;
+        text-align: center;
+        border-radius: 3px 3px 0 0;
+      }
+      .alert a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+      }
+      .alert.alert-warning {
+        background: #f8ac59;
+      }
+      .alert.alert-bad {
+        background: #ed5565;
+      }
+      .alert.alert-good {
+        background: #1ab394;
+      }
+
+      /* -------------------------------------
+    INVOICE
+    Styles for the billing table
+------------------------------------- */
+      .invoice {
+        margin: 20px auto 10px;
+        text-align: left;
+        width: 80%;
+      }
+      .invoice td {
+        padding: 5px 0;
+      }
+      .invoice .invoice-items {
+        width: 100%;
+      }
+      .invoice .invoice-items td {
+        border-top: #eee 1px solid;
+      }
+      .invoice .invoice-items .total td {
+        border-top: 2px solid #333;
+        border-bottom: 2px solid #333;
+        font-weight: 700;
+      }
+
+      /* -------------------------------------
+    RESPONSIVE AND MOBILE FRIENDLY STYLES
+------------------------------------- */
+      @media only screen and (max-width: 640px) {
+        h1,
+        h2,
+        h3,
+        h4 {
+          font-weight: 600 !important;
+          margin: 20px 0 5px !important;
+        }
+
+        h1 {
+          font-size: 22px !important;
+        }
+
+        h2 {
+          font-size: 18px !important;
+        }
+
+        h3 {
+          font-size: 16px !important;
+        }
+
+        .container {
+          width: 100% !important;
+        }
+
+        .content,
+        .content-wrap {
+          padding: 20px !important;
+        }
+
+        .invoice {
+          width: 100% !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <table class="body-wrap">
+      <tbody>
+        <tr>
+          <td></td>
+          <td class="container" width="500">
+            <div class="content">
+              <table class="main" width="100%" cellpadding="0" cellspacing="0">
+                <tbody>
+                  <tr>
+                    <td class="content-wrap aligncenter">
+                      <table width="100%" cellpadding="0" cellspacing="0">
+                        <tbody>
+                          <tr>
+                            <td>
+                              <img style="width: 100px;" src="https://uploads-ssl.webflow.com/60db56d3192ab9eed01eb92b/6557573af9aabea6060818cc_new-bp.png" alt="">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td style="background-image: url('https://img.freepik.com/free-photo/abstract-blue-geometric-shapes-background_24972-1841.jpg'); background-size: 500px 200px; background-repeat: no-repeat; padding: 30px 0;">
+                              <h3 style="margin-bottom: 0; font-size: 13px;">Hello {name}</h3>
+                              <div style="width: 15%; height: 8px; background-color: #2DB1FF; margin: 20px auto 20px;"></div>
+                              <h4 style="margin-top: 0;"><span style="color: #2DB1FF;">Your wallet has been credited with {amount}</span></h2>
+                              <p><span style="font-weight: bold;">Service Provider:</span> Bestpay</p>
+                              <p style="font-size: 11px;"><span style="font-weight: bold; font-size: 11px;">Transaction Date:</span> {date}</p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td style="margin-top: 50px;">
+                              <p style="font-size: 11px; margin-top: 35px; margin-bottom: 0;"><span style="font-weight: bold; font-size: 11px;">Receipient:</span> {name}</p>
+                              <p style="font-size: 11px; margin-top: 0;"><span style="font-weight: bold; font-size: 11px;">Amount:</span> {amount}</p>
+                            </td>
+                          </tr>
+                          <tr style="text-align: center;">
+                            <td style="padding-bottom: 0; font-size: 11px; text-align: center;" class="content-block">
+                              <!-- Reference for transaction is {reference} -->
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="content-block">
+                              <a style="font-size: 9px; text-decoration: none;" href="#">customercare@bestpaygh.com</a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <hr>
+                                    <!-- <div class="footer">
+                <table width="100%">
+                  <tbody>
+                    <tr>
+                      <td class="aligncenter content-block">
+                        <span style="font-size: 8px;">Powered by</span> <br>
+                        <a style="text-decoration: none;" href="/cdn-cgi/l/email-protection#a9"
+                          ><img style="display: inline; width: 30px;" src="https://uploads-ssl.webflow.com/60db56d3192ab9eed01eb92b/6557573af9aabea6060818cc_new-bp.png" alt=""><span
+                            style="color: #000;"
+                            ><b>Bestpay</b></span
+                          ></a
+                        >
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div> -->
+                    </td>
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <script
+      data-cfasync="false"
+      src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"
+    ></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript"></script>
+  </body>
+</html>
