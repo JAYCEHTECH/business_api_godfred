@@ -29,7 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "plankton-app-s46li.ondigitalocean.app",
-    'https://api-u5n23.ondigitalocean.app/',
+    'api-u5n23.ondigitalocean.app',
     'api.cloudhubgh.com',
     'localhost',
     '127.0.0.1'
