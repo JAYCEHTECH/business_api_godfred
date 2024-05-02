@@ -1173,6 +1173,7 @@ def admin_initiate_ishare_transaction(request):
                 # image = request.data.get('image')
 
                 if not receiver or not data_volume or not reference or not amount:
+                    print("body parameters")
                     return Response({'message': 'Body parameters not valid. Check and try again.'},
                                     status=status.HTTP_400_BAD_REQUEST)
 
@@ -1180,8 +1181,9 @@ def admin_initiate_ishare_transaction(request):
                 token_key = token_obj.key
 
                 if token_key != config("TOKEN_KEY"):
+                    print("token did not match")
                     return Response({'message': 'Authorisation Failed.'},
-                                    status=status.HTTP_400_BAD_REQUEST)
+                                    status=status.HTTP_401_UNAUTHORIZED)
 
                 date = datetime.datetime.now().strftime("%a, %b %d, %Y")
                 time = datetime.datetime.now().strftime("%I:%M:%S %p")
