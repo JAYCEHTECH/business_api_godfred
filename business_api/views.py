@@ -1150,6 +1150,7 @@ def initiate_ishare_transaction(request):
 @authentication_classes([BearerTokenAuthentication])
 def admin_initiate_ishare_transaction(request):
     authorization_header = request.headers.get('Authorization')
+    print(authorization_header)
     if authorization_header:
         auth_type, token = authorization_header.split(' ')
         if auth_type == 'Bearer':
@@ -1343,6 +1344,7 @@ def admin_initiate_ishare_transaction(request):
             except Token.DoesNotExist:
                 return Response({'error': 'Token does not exist.'}, status=status.HTTP_401_UNAUTHORIZED)
         else:
+            print("hereeeeeeeeee")
             return Response({'error': 'Invalid Header Provided.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
