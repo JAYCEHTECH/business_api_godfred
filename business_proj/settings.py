@@ -29,8 +29,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "plankton-app-s46li.ondigitalocean.app",
-    'merchant-nz2nc.ondigitalocean.app',
-    'merchant.cloudhubgh.com',
+    'https://api-u5n23.ondigitalocean.app/',
+    'api.cloudhubgh.com',
     'localhost',
     '127.0.0.1'
 ]
