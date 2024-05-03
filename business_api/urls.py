@@ -32,7 +32,5 @@ urlpatterns = [
     path('api/elevated/initiate_voda_airtime', views.admin_initiate_voda_airtime, name='initiate_voda_airtime'),
     path('api/elevated/initiate_at_airtime', views.admin_initiate_at_airtime, name='initiate_at_airtime'),
     path('api/elevated/initiate_glo_airtime', views.admin_initiate_glo_airtime, name='initiate_glo_airtime'),
-
-    path('api/initiate_wallet_topup_on_site', views.site_wallet_topup, name='site_wallet_topup'),
 ] + static(conf_settings.STATIC_URL, document_root=conf_settings.STATIC_ROOT)
 

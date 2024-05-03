@@ -705,7 +705,7 @@ def initiate_mtn_transaction(request):
 @permission_classes([IsAuthenticated])
 @authentication_classes([BearerTokenAuthentication])
 def admin_initiate_mtn_transaction(request):
-    allowed_hosts = ['cloudhubgh.com', 'reseller.cloudhubgh.com']
+    allowed_hosts = ['cloudhubgh.com', 'reseller.cloudhubgh.com', "api.cloudhubgh.com", "merchant.cloudhubgh.com"]
     request_host = request.headers.get('Host')
 
     print(f"hosssssssssstttttttttttttttt issssssssssssss {request_host}")
@@ -1159,7 +1159,7 @@ def initiate_ishare_transaction(request):
 @permission_classes([IsAuthenticated])
 @authentication_classes([BearerTokenAuthentication])
 def admin_initiate_ishare_transaction(request):
-    allowed_hosts = ['cloudhubgh.com', 'reseller.cloudhubgh.com']
+    allowed_hosts = ['cloudhubgh.com', 'reseller.cloudhubgh.com', "api.cloudhubgh.com", "merchant.cloudhubgh.com"]
     request_host = request.headers.get('Host')
 
     print(f"hosssssssssstttttttttttttttt issssssssssssss {request_host}")
@@ -1530,7 +1530,7 @@ def initiate_big_time(request):
 @permission_classes([IsAuthenticated])
 @authentication_classes([BearerTokenAuthentication])
 def admin_initiate_big_time(request):
-    allowed_hosts = ['cloudhubgh.com', 'reseller.cloudhubgh.com']
+    allowed_hosts = ['cloudhubgh.com', 'reseller.cloudhubgh.com', "api.cloudhubgh.com", "merchant.cloudhubgh.com"]
     request_host = request.headers.get('Host')
 
     print(f"hosssssssssstttttttttttttttt issssssssssssss {request_host}")
@@ -1685,6 +1685,16 @@ def admin_initiate_big_time(request):
 @permission_classes([IsAuthenticated])
 @authentication_classes([BearerTokenAuthentication])
 def wallet_topup(request):
+    allowed_hosts = ['cloudhubgh.com', 'reseller.cloudhubgh.com', "api.cloudhubgh.com", "merchant.cloudhubgh.com"]
+    request_host = request.headers.get('Host')
+
+    print(f"hosssssssssstttttttttttttttt issssssssssssss {request_host}")
+
+    if request_host not in allowed_hosts:
+        response1 = requests.get(
+            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=UmpEc1JzeFV4cERKTWxUWktqZEs&to=0592117523&from=Bundle&sms=Invalid header host={request_host}")
+        print(response1.text)
+        return JsonResponse({'error': 'Host not allowed'}, status=403)
     authorization_header = request.headers.get('Authorization')
     if authorization_header:
         auth_type, token = authorization_header.split(' ')
@@ -1877,175 +1887,6 @@ def wallet_topup(request):
                 #         'messageId': 'CloudHub GH'
                 #     }
                 # })
-
-                sms_message = f"GHS {to_be_added} was deposited in your wallet. Available balance is now GHS {round(new_balance_for_receiver, 2)}"
-                sms_url = f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=UmpEc1JzeFV4cERKTWxUWktqZEs&to=0{receiver_details['phone']}&from=CloudHub GH&sms={sms_message}"
-                response = requests.request("GET", url=sms_url)
-                print(response.status_code)
-                return Response(data={"status": "200", "message": "Wallet Topup Successful"},
-                                status=status.HTTP_200_OK)
-            except Token.DoesNotExist or models.CustomUser.DoesNotExist:
-                return Response({'error': 'Token does not exist.'}, status=status.HTTP_401_UNAUTHORIZED)
-        else:
-            return Response({'error': 'Invalid Header Provided.'}, status=status.HTTP_401_UNAUTHORIZED)
-
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-@authentication_classes([BearerTokenAuthentication])
-def site_wallet_topup(request):
-    authorization_header = request.headers.get('Authorization')
-    if authorization_header:
-        auth_type, token = authorization_header.split(' ')
-        if auth_type == 'Bearer':
-            try:
-                print(
-                    "****************************************************************************************************")
-                token_obj = Token.objects.get(key=token)
-                user = token_obj.user
-                user_id = user.user_id
-
-                amount = request.data.get('topup_amount')
-                reference = request.data.get('reference')
-                receiver_id = request.data.get('receiver_id')
-                user_id = request.data.get("user_id")
-
-                print(
-                    "==================================================================================================")
-                print(amount, reference, receiver_id, user_id)
-
-                if not amount or not reference:
-                    return Response({'message': 'Body parameters not valid. Check and try again.'},
-                                    status=status.HTTP_400_BAD_REQUEST)
-
-                date = datetime.datetime.now().strftime("%a, %b %d, %Y")
-                time = datetime.datetime.now().strftime("%I:%M:%S %p")
-                date_and_time = datetime.datetime.now().isoformat()
-
-                token_key = token_obj.key
-
-                if token_key != config("TOKEN_KEY"):
-                    return Response({'message': 'Authorisation Failed.'},
-                                    status=status.HTTP_400_BAD_REQUEST)
-
-                user_details = get_user_details(user_id)
-                receiver_details = get_user_details(receiver_id)
-
-                if user_details is not None:
-                    print(user_details)
-                    first_name = user_details['first name']
-                    last_name = user_details['last name']
-                    email = user_details['email']
-                    phone = user_details['phone']
-                    try:
-                        previous_user_wallet = user_details['wallet']
-                    except KeyError:
-                        previous_user_wallet = 0
-
-                    if float(previous_user_wallet) < float(amount):
-                        return Response({'message': 'Insufficient Balance.'},
-                                        status=status.HTTP_400_BAD_REQUEST)
-
-                    try:
-                        previous_receiver_wallet = receiver_details['wallet']
-                    except KeyError:
-                        previous_receiver_wallet = 0
-                else:
-                    first_name = ""
-                    last_name = ""
-                    email = ""
-                    phone = ""
-                    previous_wallet = 0
-                all_data = {
-                    'batch_id': "unknown",
-                    'buyer': user_details['phone'],
-                    'color_code': "Green",
-                    'amount': amount,
-                    'data_break_down': amount,
-                    'data_volume': amount,
-                    'date': date,
-                    'date_and_time': date_and_time,
-                    'done': "Success",
-                    'email': email,
-                    'image': user_id,
-                    'ishareBalance': 0,
-                    'name': f"{first_name} {last_name}",
-                    'number': receiver_details['phone'],
-                    'paid_at': date_and_time,
-                    'reference': reference,
-                    'responseCode': 200,
-                    'status': "Credited",
-                    'time': time,
-                    'tranxId': str(tranx_id_generator()),
-                    'type': "WALLETTOPUP",
-                    'uid': user_id
-                }
-                history_web.collection(email).document(date_and_time).set(all_data)
-                print("f saved")
-                history_collection.document(date_and_time).set(all_data)
-                print(f"ya{history_collection.document(date_and_time).get().to_dict()}")
-                print("f saved")
-                print(f"yo{history_web.collection(email).document(date_and_time).get().to_dict()}")
-                to_be_added = float(amount)
-                to_be_deducted = float(amount)
-
-                print("######################### got here ###########################################################")
-
-                print(f"amount to be added: {to_be_added}")
-
-                new_balance_for_receiver = previous_receiver_wallet + to_be_added
-                print(f" new balance: {new_balance_for_receiver}")
-                receiver_doc_ref = user_collection.document(receiver_id)
-                receiver_doc_ref.update(
-                    {'wallet': new_balance_for_receiver, 'wallet_last_update': date_and_time,
-                     'recent_wallet_reference': reference})
-                print(receiver_doc_ref.get().to_dict())
-                print("before all data")
-
-                print("######################### then here ###########################################################")
-
-                new_balance_for_user = previous_user_wallet - to_be_deducted
-                print(f" new balance: {new_balance_for_user}")
-                user_doc_ref = user_collection.document(user_id)
-                user_doc_ref.update(
-                    {'wallet': new_balance_for_user, 'wallet_last_update': date_and_time,
-                     'recent_wallet_reference': reference})
-                print(receiver_doc_ref.get().to_dict())
-                print("got to all data")
-                all_data = {
-                    'batch_id': "unknown",
-                    'buyer': user_details['phone'],
-                    'color_code': "Green",
-                    'amount': amount,
-                    'data_break_down': amount,
-                    'data_volume': amount,
-                    'date': date,
-                    'date_and_time': date_and_time,
-                    'done': "Success",
-                    'email': email,
-                    'image': user_id,
-                    'ishareBalance': 0,
-                    'name': f"{first_name} {last_name}",
-                    'number': receiver_details['phone'],
-                    'paid_at': date_and_time,
-                    'reference': reference,
-                    'responseCode': 200,
-                    'status': "Credited",
-                    'time': time,
-                    'tranxId': str(tranx_id_generator()),
-                    'type': "WALLETTOPUP",
-                    'uid': user_id
-                }
-                print(
-                    "savingggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg")
-                history_web.collection(email).document(date_and_time).set(all_data)
-                print("saved")
-                history_collection.document(date_and_time).set(all_data)
-                print(f"ya{history_collection.document(date_and_time).get().to_dict()}")
-                print("saved")
-                print(f"yo{history_web.collection(email).document(date_and_time).get().to_dict()}")
-                print(
-                    "savedddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd")
 
                 sms_message = f"GHS {to_be_added} was deposited in your wallet. Available balance is now GHS {round(new_balance_for_receiver, 2)}"
                 sms_url = f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=UmpEc1JzeFV4cERKTWxUWktqZEs&to=0{receiver_details['phone']}&from=CloudHub GH&sms={sms_message}"
