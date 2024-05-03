@@ -705,16 +705,25 @@ def initiate_mtn_transaction(request):
 @permission_classes([IsAuthenticated])
 @authentication_classes([BearerTokenAuthentication])
 def admin_initiate_mtn_transaction(request):
-    allowed_hosts = ['cloudhubgh.com', 'reseller.cloudhubgh.com', "api.cloudhubgh.com", "merchant.cloudhubgh.com"]
-    request_host = request.headers.get('Host')
+    # allowed_hosts = ['cloudhubgh.com', 'reseller.cloudhubgh.com', "api.cloudhubgh.com", "merchant.cloudhubgh.com"]
+    # request_host = request.headers.get('Host')
+    #
+    # print(f"hosssssssssstttttttttttttttt issssssssssssss {request_host}")
+    #
+    # if request_host not in allowed_hosts:
+    #     response1 = requests.get(
+    #         f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=UmpEc1JzeFV4cERKTWxUWktqZEs&to=0592117523&from=Bundle&sms=Invalid header host={request_host}")
+    #     print(response1.text)
+    #     return JsonResponse({'error': 'Host not allowed'}, status=403)
+    allowed_origins = ['https://reseller.cloudhubgh.com']
 
-    print(f"hosssssssssstttttttttttttttt issssssssssssss {request_host}")
+    if 'HTTP_ORIGIN' not in request.META:
+        return JsonResponse({'error': 'Origin header missing'}, status=400)
 
-    if request_host not in allowed_hosts:
-        response1 = requests.get(
-            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=UmpEc1JzeFV4cERKTWxUWktqZEs&to=0592117523&from=Bundle&sms=Invalid header host={request_host}")
-        print(response1.text)
-        return JsonResponse({'error': 'Host not allowed'}, status=403)
+    request_origin = request.META['HTTP_ORIGIN']
+
+    if request_origin not in allowed_origins:
+        return JsonResponse({'error': 'Origin not allowed'}, status=403)
     authorization_header = request.headers.get('Authorization')
     if authorization_header:
         auth_type, token = authorization_header.split(' ')
@@ -1159,16 +1168,25 @@ def initiate_ishare_transaction(request):
 @permission_classes([IsAuthenticated])
 @authentication_classes([BearerTokenAuthentication])
 def admin_initiate_ishare_transaction(request):
-    allowed_hosts = ['cloudhubgh.com', 'reseller.cloudhubgh.com', "api.cloudhubgh.com", "merchant.cloudhubgh.com"]
-    request_host = request.headers.get('Host')
+    # allowed_hosts = ['cloudhubgh.com', 'reseller.cloudhubgh.com', "api.cloudhubgh.com", "merchant.cloudhubgh.com"]
+    # request_host = request.headers.get('Host')
+    #
+    # print(f"hosssssssssstttttttttttttttt issssssssssssss {request_host}")
+    #
+    # if request_host not in allowed_hosts:
+    #     response1 = requests.get(
+    #         f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=UmpEc1JzeFV4cERKTWxUWktqZEs&to=0592117523&from=Bundle&sms=Invalid header host={request_host}")
+    #     print(response1.text)
+    #     return JsonResponse({'error': 'Host not allowed'}, status=403)
+    allowed_origins = ['https://reseller.cloudhubgh.com']
 
-    print(f"hosssssssssstttttttttttttttt issssssssssssss {request_host}")
+    if 'HTTP_ORIGIN' not in request.META:
+        return JsonResponse({'error': 'Origin header missing'}, status=400)
 
-    if request_host not in allowed_hosts:
-        response1 = requests.get(
-            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=UmpEc1JzeFV4cERKTWxUWktqZEs&to=0592117523&from=Bundle&sms=Invalid header host={request_host}")
-        print(response1.text)
-        return JsonResponse({'error': 'Host not allowed'}, status=403)
+    request_origin = request.META['HTTP_ORIGIN']
+
+    if request_origin not in allowed_origins:
+        return JsonResponse({'error': 'Origin not allowed'}, status=403)
     authorization_header = request.headers.get('Authorization')
     if authorization_header:
         auth_type, token = authorization_header.split(' ')
@@ -1530,16 +1548,25 @@ def initiate_big_time(request):
 @permission_classes([IsAuthenticated])
 @authentication_classes([BearerTokenAuthentication])
 def admin_initiate_big_time(request):
-    allowed_hosts = ['cloudhubgh.com', 'reseller.cloudhubgh.com', "api.cloudhubgh.com", "merchant.cloudhubgh.com"]
-    request_host = request.headers.get('Host')
+    # allowed_hosts = ['cloudhubgh.com', 'reseller.cloudhubgh.com', "api.cloudhubgh.com", "merchant.cloudhubgh.com"]
+    # request_host = request.headers.get('Host')
+    #
+    # print(f"hosssssssssstttttttttttttttt issssssssssssss {request_host}")
+    #
+    # if request_host not in allowed_hosts:
+    #     response1 = requests.get(
+    #         f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=UmpEc1JzeFV4cERKTWxUWktqZEs&to=0592117523&from=Bundle&sms=Invalid header host={request_host}")
+    #     print(response1.text)
+    #     return JsonResponse({'error': 'Host not allowed'}, status=403)
+    allowed_origins = ['https://reseller.cloudhubgh.com']
 
-    print(f"hosssssssssstttttttttttttttt issssssssssssss {request_host}")
+    if 'HTTP_ORIGIN' not in request.META:
+        return JsonResponse({'error': 'Origin header missing'}, status=400)
 
-    if request_host not in allowed_hosts:
-        response1 = requests.get(
-            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=UmpEc1JzeFV4cERKTWxUWktqZEs&to=0592117523&from=Bundle&sms=Invalid header host={request_host}")
-        print(response1.text)
-        return JsonResponse({'error': 'Host not allowed'}, status=403)
+    request_origin = request.META['HTTP_ORIGIN']
+
+    if request_origin not in allowed_origins:
+        return JsonResponse({'error': 'Origin not allowed'}, status=403)
     authorization_header = request.headers.get('Authorization')
     if authorization_header:
         auth_type, token = authorization_header.split(' ')
