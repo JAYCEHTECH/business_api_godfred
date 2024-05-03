@@ -25,7 +25,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECRET_KEY = "FSGH"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "plankton-app-s46li.ondigitalocean.app",
