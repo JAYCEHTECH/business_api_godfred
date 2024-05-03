@@ -224,17 +224,3 @@ FIREBASE_ADMIN_CERT = {
     "universe_domain": "googleapis.com"
 }
 
-# FIREBASE_ADMIN_CERT = {
-#   "type": "service_account",
-#   "project_id": "bestpay-flutter",
-#   "private_key_id": "b242d1c5780378298cb04a12716f5451688c79b6",
-#   "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCYu2TBplvZSXL9\nSfcdZ90zP36rrBWDLOcUfbf2QHX08jN//QQ4Wwrzh9j3udUwoVyflUuo1oLNt0GL\nXqRaclcLt9OhvV4blz9+E1Hkd2pQ9d5agalGMvlUy1QUMmd8TvuemhglOD7oLkGx\n5eAuRytdTJtivzMQdS6yWpXpSA0EHpwcyLZjKDYfsGUe1s65mi/NNOczCg0DPZ44\nD30JgO8Ca9BPDrVbi43/v8gec/rt8YEomRq0Cza5v+UXSKHy2bk5UpkBMtXkVQe2\nHwZ67L122+wOi4IZe55npD3ZBJM/gUf3/a4oWkqC3lmDX0m2uJr6DjnSme8Jj4MY\nlpTnSGSzAgMBAAECggEAI5XJyHq/vLUpxw0EOAQ6nBWnqEz8aCc+od4Wzhe/w/Xo\nfOIRKSZBO3OD4FgabW2zPHVW/vwX1uFjMps29OHeGRtYAj+yXQBU6UWMF4yhJ0LZ\n70F1lKcMw65qJRiHVwW6B36EsKtVsNgSM2ZJYM7xMhhGve+pcKS04BZOBl/ktHgn\nIpYpBxG8kqp1ntGm2oYp849wLch4S5Yrzjq+Cc8NtBLGR4zr0YcY9pPxb2SqAs8f\ntsLLS8iQ409rBCgX9siaSZd7XJBCz76l0nhA9hkxPgKS1NXRa/ORRDX1secXDQlJ\nUjYxqQrMf+GaQVDuU7PrbLhKrvZ5z7WutdFh6od0sQKBgQDJ/WBngRlWlyvnE30H\n/4UzjdHta6ALWfuUg3CCm8DtM/XdunjHFvnE21drpwuuUuKEDxNdKLR+fIzWay7+\naVdPp6yUeOlWv328itCuexVrMHCfzTEFjetTkk6AOQqCrupcOOPBg0z96w43loLq\nWq/2s6apDy4VEdo0q0IUmCuogwKBgQDBkjh9vRX6tjHImp+m2lJWwq/kPXLfxNRN\nLgTQweCkCykQTvjfzNUBxeCT3t+ru7lIh4U4P9Iz5QqlqR9YbhR9EFt0Q9LGNEQR\nFVND++HCs2XLB1v5bS0r3OaWXvSkUQr3HzNXzBDaTu6RYh+mW+MaCqP28cq20NRK\nTYH5Oza8EQKBgD8/SHWAdheoBEY50vezKdlHugkWnymOxnjtY0hyTsm3cHA6WGE2\nr4TVjZ0W1FCEgYsKUWzlNwc4Jr1pGHDvOTim7yIabi4MjemAqfFIdx92Ln3LOWNc\n2ef0MwJxWfornRS9d4t7epszg+MiDOIm/VxJSpE7QJm2WlYNngZm05zTAoGBAL19\nQTW9kzWRg1yIGP+COxZZkUvR55EsIlPHV8lv8VNE5ZbkZ/bVkjMhHP5EMBryMqfQ\nmlX9C+3nKiwPSfMMF5xyFcTT3BJQ+czrXk5v1Yn+ighdFOkvugd1QHk1TTFJcH2H\nmoA48Mp0eE/ziV4WF1PX1LiZ68JY3Wg7RZ/QGn2xAoGATujlj05D0OrCOqoVuSun\nb7RshG/v/0YyHZdG8t1xPTYZ3ldK5BU44jogMrr0LyPqkAhGqsytGu/xpMAo1Hep\nTSE5GO/lkOHpqQGcsz7pK03o8949jj7OMVLZzV35ESuyLL1WpknfJwmnWkqE1Jxm\nKjuyaB7iUfLY21+6b6w4RN4=\n-----END PRIVATE KEY-----\n",
-#   "client_email": "firebase-adminsdk-23jiw@bestpay-flutter.iam.gserviceaccount.com",
-#   "client_id": "104574638162161301216",
-#   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-#   "token_uri": "https://oauth2.googleapis.com/token",
-#   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-#   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-23jiw%40bestpay-flutter.iam.gserviceaccount.com",
-#   "universe_domain": "googleapis.com"
-# }
-
