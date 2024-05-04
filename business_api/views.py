@@ -767,11 +767,8 @@ def admin_initiate_mtn_transaction(request):
                     50000: 155,
                     100000: 290
                 }
-
+                print(amount)
                 amount_to_be_deducted = prices_dict[data_volume]
-                if amount != amount_to_be_deducted:
-                    return Response({'message': 'Invalid amount.'},
-                                    status=status.HTTP_400_BAD_REQUEST)
                 print(str(amount_to_be_deducted) + "================")
                 # channel = phone_number
                 date = datetime.datetime.now().strftime("%a, %b %d, %Y")
@@ -1248,9 +1245,7 @@ def admin_initiate_ishare_transaction(request):
                     100000: 290
                 }
 
-                if amount != prices_dict[data_volume]:
-                    return Response({'message': 'Invalid amount.'},
-                                    status=status.HTTP_400_BAD_REQUEST)
+                amount = prices_dict[data_volume]
 
                 date = datetime.datetime.now().strftime("%a, %b %d, %Y")
                 time = datetime.datetime.now().strftime("%I:%M:%S %p")
@@ -1615,6 +1610,8 @@ def admin_initiate_big_time(request):
                     80000: 200,
                     100000: 230,
                     200000: 450,
+                    500000: 1125,
+                    1000000: 2250
                 }
 
                 receiver = request.data.get('receiver')
@@ -1622,10 +1619,11 @@ def admin_initiate_big_time(request):
                 data_volume = request.data.get('data_volume')
                 reference = request.data.get('reference')
                 user_id = request.data.get('user_id')
+                passed_amount = request.data.get('amount')
                 print(data_volume, reference)
                 try:
                     amount = prices_dict[data_volume]
-                    if amount != amount:
+                    if amount != passed_amount:
                         return Response({'message': 'Invalid amount.'},
                                         status=status.HTTP_400_BAD_REQUEST)
                     print(amount)
