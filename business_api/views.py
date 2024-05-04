@@ -750,28 +750,28 @@ def admin_initiate_mtn_transaction(request):
                                     status=status.HTTP_400_BAD_REQUEST)
 
                 prices_dict = {
-                    1000: 4.0,
-                    2000: 7.9,
-                    3000: 11.1,
-                    4000: 14.6,
-                    5000: 18.1,
-                    6000: 21.1,
-                    7000: 25.1,
-                    8000: 27.1,
-                    10000: 32.1,
-                    15000: 48.1,
-                    20000: 64.1,
-                    25000: 78.1,
-                    30000: 94.1,
-                    40000: 128.1,
-                    50000: 155.1,
-                    100000: 290.1
+                    1000: 3.9,
+                    2000: 7.8,
+                    3000: 11,
+                    4000: 14.5,
+                    5000: 18,
+                    6000: 21,
+                    7000: 24.5,
+                    8000: 27,
+                    10000: 32,
+                    15000: 48,
+                    20000: 64,
+                    25000: 78,
+                    30000: 94,
+                    40000: 128,
+                    50000: 155,
+                    100000: 290
                 }
 
                 amount_to_be_deducted = prices_dict[data_volume]
-                # if amount != amount_to_be_deducted:
-                #     return Response({'message': 'Invalid amount.'},
-                #                     status=status.HTTP_400_BAD_REQUEST)
+                if amount != amount_to_be_deducted:
+                    return Response({'message': 'Invalid amount.'},
+                                    status=status.HTTP_400_BAD_REQUEST)
                 print(str(amount_to_be_deducted) + "================")
                 # channel = phone_number
                 date = datetime.datetime.now().strftime("%a, %b %d, %Y")
