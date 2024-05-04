@@ -769,6 +769,9 @@ def admin_initiate_mtn_transaction(request):
                 }
 
                 amount_to_be_deducted = prices_dict[data_volume]
+                if amount != amount_to_be_deducted:
+                    return Response({'message': 'Invalid amount.'},
+                                    status=status.HTTP_400_BAD_REQUEST)
                 print(str(amount_to_be_deducted) + "================")
                 # channel = phone_number
                 date = datetime.datetime.now().strftime("%a, %b %d, %Y")
@@ -1597,6 +1600,9 @@ def admin_initiate_big_time(request):
                 print(data_volume, reference)
                 try:
                     amount = prices_dict[data_volume]
+                    if amount != amount:
+                        return Response({'message': 'Invalid amount.'},
+                                        status=status.HTTP_400_BAD_REQUEST)
                     print(amount)
                 except KeyError:
                     print("key error")
