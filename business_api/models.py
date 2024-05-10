@@ -30,3 +30,9 @@ class CashBack(models.Model):
     def __str__(self):
         return f"{self.user_id} - {self.amount}"
 
+
+class Blacklist(models.Model):
+    phone_number = models.CharField(max_length=200, null=False, blank=False)
+
+    def __str__(self):
+        return self.phone_number
