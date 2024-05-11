@@ -17,14 +17,4 @@ class Migration(migrations.Migration):
                 ('phone_number', models.CharField(max_length=200)),
             ],
         ),
-        migrations.CreateModel(
-            name='CashBack',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('user_id', models.CharField(max_length=200)),
-                ('user_number', models.CharField(max_length=200)),
-                ('amount', models.FloatField(default=0)),
-                ('date', models.DateTimeField(auto_now_add=True)),
-            ],
-        ),
     ]
