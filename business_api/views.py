@@ -456,253 +456,253 @@ def regenerate_token(request):
         return Response({'error': 'User does not exist.'}, status=status.HTTP_404_NOT_FOUND)
 
 
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# @authentication_classes([BearerTokenAuthentication])
-# def initiate_mtn_transaction(request):
-#     authorization_header = request.headers.get('Authorization')
-#     if authorization_header:
-#         auth_type, token = authorization_header.split(' ')
-#         if auth_type == 'Bearer':
-#             try:
-#                 token_obj = Token.objects.get(key=token)
-#                 user = token_obj.user
-#                 user_id = user.user_id
-#                 print(user_id)
-#
-#                 receiver = request.data.get('receiver')
-#                 print(receiver)
-#                 data_volume = request.data.get('data_volume')
-#                 print(data_volume)
-#                 reference = request.data.get('reference')
-#                 amount = request.data.get('amount')
-#                 phone_number = request.data.get('phone_number')
-#
-#                 if models.Blacklist.objects.filter(phone_number=str(receiver)).exists():
-#                     return Response({'message': 'Invalid Recipient.'},
-#                                     status=status.HTTP_400_BAD_REQUEST)
-#
-#                 if not receiver or not data_volume or not reference or not amount:
-#                     return Response({'message': 'Body parameters not valid. Check and try again.'},
-#                                     status=status.HTTP_400_BAD_REQUEST)
-#
-#                 prices_dict = {
-#                     1000: 3.9,
-#                     2000: 7.8,
-#                     3000: 11.0,
-#                     4000: 14.5,
-#                     5000: 18.0,
-#                     6000: 21.0,
-#                     7000: 24.5,
-#                     8000: 27.0,
-#                     10000: 32.0,
-#                     15000: 48.0,
-#                     20000: 64.0,
-#                     25000: 78.0,
-#                     30000: 94.0,
-#                     40000: 128.0,
-#                     50000: 155.0,
-#                     100000: 290.0
-#                 }
-#
-#                 amount_to_be_deducted = prices_dict[data_volume]
-#                 print(str(amount_to_be_deducted) + "================")
-#                 # channel = phone_number
-#                 date = datetime.datetime.now().strftime("%a, %b %d, %Y")
-#                 time = datetime.datetime.now().strftime("%I:%M:%S %p")
-#                 date_and_time = datetime.datetime.now().isoformat()
-#                 if "wallet" == "wallet":
-#                     print("used this")
-#                     try:
-#                         enough_balance = check_user_balance_against_price(user_id, amount_to_be_deducted)
-#                     except:
-#                         return Response(
-#                             {'code': '0001', 'message': f'User ID does not exist: User ID provided: {user_id}.'},
-#                             status=status.HTTP_400_BAD_REQUEST)
-#                 else:
-#                     enough_balance = True
-#                     print("not wallet")
-#                 print(enough_balance)
-#                 if enough_balance:
-#                     user_details = get_user_details(user_id)
-#                     first_name = user_details['first name']
-#                     last_name = user_details['last name']
-#                     email = user_details['email']
-#                     phone = user_details['phone']
-#                     bal = user_details['wallet']
-#                     # hist = history_web.collection(email).document(date_and_time)
-#                     # doc = hist.get()
-#                     # if doc.exists:
-#                     #     print(doc)
-#                     #     return redirect(f"https://{callback_url}")
-#                     # else:
-#                     #     print("no record found")
-#                     if "wallet" == "wallet":
-#                         print("updated")
-#                         user = get_user_details(user_id)
-#                         if user is None:
-#                             return None
-#                         previous_user_wallet = user['wallet']
-#                         print(f"previous wallet: {previous_user_wallet}")
-#                         new_balance = float(previous_user_wallet) - float(amount_to_be_deducted)
-#                         print(f"new_balance:{new_balance}")
-#                         doc_ref = user_collection.document(user_id)
-#                         doc_ref.update({'wallet': new_balance})
-#                         user = get_user_details(user_id)
-#                         new_user_wallet = user['wallet']
-#                         print(f"new_user_wallet: {new_user_wallet}")
-#                         if new_user_wallet == previous_user_wallet:
-#                             user = get_user_details(user_id)
-#                             if user is None:
-#                                 return None
-#                             previous_user_wallet = user['wallet']
-#                             print(f"previous wallet: {previous_user_wallet}")
-#                             new_balance = float(previous_user_wallet) - float(amount_to_be_deducted)
-#                             print(f"new_balance:{new_balance}")
-#                             doc_ref = user_collection.document(user_id)
-#                             doc_ref.update({'wallet': new_balance})
-#                             user = get_user_details(user_id)
-#                             new_user_wallet = user['wallet']
-#                             print(f"new_user_wallet: {new_user_wallet}")
-#                         else:
-#                             print("it's fine")
-#
-#                     data = {
-#                         'batch_id': "unknown",
-#                         'buyer': phone_number,
-#                         'color_code': "Green",
-#                         'amount': amount_to_be_deducted,
-#                         'data_break_down': data_volume,
-#                         'data_volume': data_volume,
-#                         'date': str(date),
-#                         'date_and_time': str(date_and_time),
-#                         'done': "unknown",
-#                         'email': email,
-#                         'image': user_id,
-#                         'ishareBalance': '',
-#                         'name': f"{first_name} {last_name}",
-#                         'number': receiver,
-#                         'paid_at': str(date_and_time),
-#                         'reference': reference,
-#                         'responseCode': 200,
-#                         'status': "Undelivered",
-#                         'bal': bal,
-#                         'time': str(time),
-#                         'tranxId': str(tranx_id_generator()),
-#                         'type': "MTN Master Bundle",
-#                         'uid': user_id
-#                     }
-#
-#                     history_collection.document(date_and_time).set(data)
-#                     history_web.collection(email).document(date_and_time).set(data)
-#                     user = history_collection.document(date_and_time)
-#                     doc = user.get()
-#                     print(doc.to_dict())
-#                     tranx_id = doc.to_dict()['tranxId']
-#                     second_data = {
-#                         'amount': amount_to_be_deducted,
-#                         'batch_id': "unknown",
-#                         'channel': "wallet",
-#                         'color_code': "Green",
-#                         'created_at': date_and_time,
-#                         'data_volume': data_volume,
-#                         'date': str(date),
-#                         'email': email,
-#                         'date_and_time': date_and_time,
-#                         'image': user_id,
-#                         'ip_address': "",
-#                         'ishareBalance': 0,
-#                         'name': f"{first_name} {last_name}",
-#                         'number': receiver,
-#                         'buyer': phone_number,
-#                         'paid_at': date_and_time,
-#                         'payment_status': "success",
-#                         'reference': reference,
-#                         'status': "Undelivered",
-#                         'bal': bal,
-#                         'time': str(time),
-#                         'tranxId': tranx_id,
-#                         'type': "MTN Master Bundle"
-#                     }
-#                     mtn_other.document(date_and_time).set(second_data)
-#                     print("pu")
-#
-#                     # tot = user_collection.document(user_id)
-#                     # print(tot.get().to_dict())
-#                     # try:
-#                     #     print(tot.get().to_dict()['mtn_total_sales'])
-#                     #     previous_sale = tot.get().to_dict()['mtn_total_sales']
-#                     #     print(f"Previous Sale: {previous_sale}")
-#                     #     new_sale = float(previous_sale) + float(amount_to_be_deducted)
-#                     #     print(new_sale)
-#                     #     user_collection.document(user_id).update({'mtn_total_sales': new_sale})
-#                     # except:
-#                     #     user_collection.document(user_id).update({'mtn_total_sales': amount_to_be_deducted})
-#
-#                     # tat = cashback_collection.document(user_id)
-#                     # print(tat.get().to_dict())
-#                     #
-#                     # try:
-#                     #     previous_cashback = tat.get().to_dict()['cashback_wallet']
-#                     #     print(previous_cashback)
-#                     #     cashback_balance = (0.5 / 100) * float(amount_to_be_deducted)
-#                     #     print(cashback_balance)
-#                     #     new_cashback = float(previous_cashback) + float(cashback_balance)
-#                     #     print(new_cashback)
-#                     #     cashback_collection.document(user_id).update(
-#                     #         {'cashback_wallet': new_cashback, 'phone_number': user_details['phone']})
-#                     #
-#                     # except TypeError as e:
-#                     #     print(e)
-#                     #     cashback_balance = (0.5 / 100) * float(amount_to_be_deducted)
-#                     #     print(cashback_balance)
-#                     #     cashback_collection.document(user_id).set(
-#                     #         {'cashback_wallet': cashback_balance, 'phone_number': user_details['phone']})
-#                     #
-#                     #     print(cashback_collection.document(user_id).get().to_dict())
-#                     #     print("did")
-#
-#                     mail_doc_ref = mail_collection.document()
-#                     file_path = 'business_api/mtn_maill.txt'  # Replace with your file path
-#
-#                     name = first_name
-#                     volume = data_volume
-#                     date = date_and_time
-#                     reference_t = reference
-#                     receiver_t = receiver
-#
-#                     with open(file_path, 'r') as file:
-#                         html_content = file.read()
-#
-#                     placeholders = {
-#                         '{name}': name,
-#                         '{volume}': volume,
-#                         '{date}': date,
-#                         '{reference}': reference_t,
-#                         '{receiver}': receiver_t
-#                     }
-#
-#                     for placeholder, value in placeholders.items():
-#                         html_content = html_content.replace(placeholder, str(value))
-#
-#                     mail_doc_ref.set({
-#                         'to': email,
-#                         'message': {
-#                             'subject': 'MTN Data',
-#                             'html': html_content,
-#                             'messageId': 'CloudHub GH'
-#                         }
-#                     })
-#                     print("got to redirect")
-#                     return Response(data={"status": "200", "message": "Transaction received successfully"},
-#                                     status=status.HTTP_200_OK)
-#                 else:
-#                     return Response({"status": '400', 'message': 'Not enough balance to perform transaction'},
-#                                     status=status.HTTP_400_BAD_REQUEST)
-#             except Token.DoesNotExist:
-#                 return Response({'error': 'Token does not exist.'}, status=status.HTTP_401_UNAUTHORIZED)
-#         else:
-#             return Response({'error': 'Invalid Header Provided.'}, status=status.HTTP_401_UNAUTHORIZED)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([BearerTokenAuthentication])
+def initiate_mtn_transaction(request):
+    authorization_header = request.headers.get('Authorization')
+    if authorization_header:
+        auth_type, token = authorization_header.split(' ')
+        if auth_type == 'Bearer':
+            try:
+                token_obj = Token.objects.get(key=token)
+                user = token_obj.user
+                user_id = user.user_id
+                print(user_id)
+
+                receiver = request.data.get('receiver')
+                print(receiver)
+                data_volume = request.data.get('data_volume')
+                print(data_volume)
+                reference = request.data.get('reference')
+                amount = request.data.get('amount')
+                phone_number = request.data.get('phone_number')
+
+                if models.Blacklist.objects.filter(phone_number=str(receiver)).exists():
+                    return Response({'message': 'Invalid Recipient.'},
+                                    status=status.HTTP_400_BAD_REQUEST)
+
+                if not receiver or not data_volume or not reference or not amount:
+                    return Response({'message': 'Body parameters not valid. Check and try again.'},
+                                    status=status.HTTP_400_BAD_REQUEST)
+
+                prices_dict = {
+                    1000: 3.9,
+                    2000: 7.8,
+                    3000: 11.0,
+                    4000: 14.5,
+                    5000: 18.0,
+                    6000: 21.0,
+                    7000: 24.5,
+                    8000: 27.0,
+                    10000: 32.0,
+                    15000: 48.0,
+                    20000: 64.0,
+                    25000: 78.0,
+                    30000: 94.0,
+                    40000: 128.0,
+                    50000: 155.0,
+                    100000: 290.0
+                }
+
+                amount_to_be_deducted = prices_dict[data_volume]
+                print(str(amount_to_be_deducted) + "================")
+                # channel = phone_number
+                date = datetime.datetime.now().strftime("%a, %b %d, %Y")
+                time = datetime.datetime.now().strftime("%I:%M:%S %p")
+                date_and_time = datetime.datetime.now().isoformat()
+                if "wallet" == "wallet":
+                    print("used this")
+                    try:
+                        enough_balance = check_user_balance_against_price(user_id, amount_to_be_deducted)
+                    except:
+                        return Response(
+                            {'code': '0001', 'message': f'User ID does not exist: User ID provided: {user_id}.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    enough_balance = True
+                    print("not wallet")
+                print(enough_balance)
+                if enough_balance:
+                    user_details = get_user_details(user_id)
+                    first_name = user_details['first name']
+                    last_name = user_details['last name']
+                    email = user_details['email']
+                    phone = user_details['phone']
+                    bal = user_details['wallet']
+                    # hist = history_web.collection(email).document(date_and_time)
+                    # doc = hist.get()
+                    # if doc.exists:
+                    #     print(doc)
+                    #     return redirect(f"https://{callback_url}")
+                    # else:
+                    #     print("no record found")
+                    if "wallet" == "wallet":
+                        print("updated")
+                        user = get_user_details(user_id)
+                        if user is None:
+                            return None
+                        previous_user_wallet = user['wallet']
+                        print(f"previous wallet: {previous_user_wallet}")
+                        new_balance = float(previous_user_wallet) - float(amount_to_be_deducted)
+                        print(f"new_balance:{new_balance}")
+                        doc_ref = user_collection.document(user_id)
+                        doc_ref.update({'wallet': new_balance})
+                        user = get_user_details(user_id)
+                        new_user_wallet = user['wallet']
+                        print(f"new_user_wallet: {new_user_wallet}")
+                        if new_user_wallet == previous_user_wallet:
+                            user = get_user_details(user_id)
+                            if user is None:
+                                return None
+                            previous_user_wallet = user['wallet']
+                            print(f"previous wallet: {previous_user_wallet}")
+                            new_balance = float(previous_user_wallet) - float(amount_to_be_deducted)
+                            print(f"new_balance:{new_balance}")
+                            doc_ref = user_collection.document(user_id)
+                            doc_ref.update({'wallet': new_balance})
+                            user = get_user_details(user_id)
+                            new_user_wallet = user['wallet']
+                            print(f"new_user_wallet: {new_user_wallet}")
+                        else:
+                            print("it's fine")
+
+                    data = {
+                        'batch_id': "unknown",
+                        'buyer': phone_number,
+                        'color_code': "Green",
+                        'amount': amount_to_be_deducted,
+                        'data_break_down': data_volume,
+                        'data_volume': data_volume,
+                        'date': str(date),
+                        'date_and_time': str(date_and_time),
+                        'done': "unknown",
+                        'email': email,
+                        'image': user_id,
+                        'ishareBalance': '',
+                        'name': f"{first_name} {last_name}",
+                        'number': receiver,
+                        'paid_at': str(date_and_time),
+                        'reference': reference,
+                        'responseCode': 200,
+                        'status': "Undelivered",
+                        'bal': bal,
+                        'time': str(time),
+                        'tranxId': str(tranx_id_generator()),
+                        'type': "MTN Master Bundle",
+                        'uid': user_id
+                    }
+
+                    history_collection.document(date_and_time).set(data)
+                    history_web.collection(email).document(date_and_time).set(data)
+                    user = history_collection.document(date_and_time)
+                    doc = user.get()
+                    print(doc.to_dict())
+                    tranx_id = doc.to_dict()['tranxId']
+                    second_data = {
+                        'amount': amount_to_be_deducted,
+                        'batch_id': "unknown",
+                        'channel': "wallet",
+                        'color_code': "Green",
+                        'created_at': date_and_time,
+                        'data_volume': data_volume,
+                        'date': str(date),
+                        'email': email,
+                        'date_and_time': date_and_time,
+                        'image': user_id,
+                        'ip_address': "",
+                        'ishareBalance': 0,
+                        'name': f"{first_name} {last_name}",
+                        'number': receiver,
+                        'buyer': phone_number,
+                        'paid_at': date_and_time,
+                        'payment_status': "success",
+                        'reference': reference,
+                        'status': "Undelivered",
+                        'bal': bal,
+                        'time': str(time),
+                        'tranxId': tranx_id,
+                        'type': "MTN Master Bundle"
+                    }
+                    mtn_other.document(date_and_time).set(second_data)
+                    print("pu")
+
+                    # tot = user_collection.document(user_id)
+                    # print(tot.get().to_dict())
+                    # try:
+                    #     print(tot.get().to_dict()['mtn_total_sales'])
+                    #     previous_sale = tot.get().to_dict()['mtn_total_sales']
+                    #     print(f"Previous Sale: {previous_sale}")
+                    #     new_sale = float(previous_sale) + float(amount_to_be_deducted)
+                    #     print(new_sale)
+                    #     user_collection.document(user_id).update({'mtn_total_sales': new_sale})
+                    # except:
+                    #     user_collection.document(user_id).update({'mtn_total_sales': amount_to_be_deducted})
+
+                    # tat = cashback_collection.document(user_id)
+                    # print(tat.get().to_dict())
+                    #
+                    # try:
+                    #     previous_cashback = tat.get().to_dict()['cashback_wallet']
+                    #     print(previous_cashback)
+                    #     cashback_balance = (0.5 / 100) * float(amount_to_be_deducted)
+                    #     print(cashback_balance)
+                    #     new_cashback = float(previous_cashback) + float(cashback_balance)
+                    #     print(new_cashback)
+                    #     cashback_collection.document(user_id).update(
+                    #         {'cashback_wallet': new_cashback, 'phone_number': user_details['phone']})
+                    #
+                    # except TypeError as e:
+                    #     print(e)
+                    #     cashback_balance = (0.5 / 100) * float(amount_to_be_deducted)
+                    #     print(cashback_balance)
+                    #     cashback_collection.document(user_id).set(
+                    #         {'cashback_wallet': cashback_balance, 'phone_number': user_details['phone']})
+                    #
+                    #     print(cashback_collection.document(user_id).get().to_dict())
+                    #     print("did")
+
+                    mail_doc_ref = mail_collection.document()
+                    file_path = 'business_api/mtn_maill.txt'  # Replace with your file path
+
+                    name = first_name
+                    volume = data_volume
+                    date = date_and_time
+                    reference_t = reference
+                    receiver_t = receiver
+
+                    with open(file_path, 'r') as file:
+                        html_content = file.read()
+
+                    placeholders = {
+                        '{name}': name,
+                        '{volume}': volume,
+                        '{date}': date,
+                        '{reference}': reference_t,
+                        '{receiver}': receiver_t
+                    }
+
+                    for placeholder, value in placeholders.items():
+                        html_content = html_content.replace(placeholder, str(value))
+
+                    mail_doc_ref.set({
+                        'to': email,
+                        'message': {
+                            'subject': 'MTN Data',
+                            'html': html_content,
+                            'messageId': 'CloudHub GH'
+                        }
+                    })
+                    print("got to redirect")
+                    return Response(data={"status": "200", "message": "Transaction received successfully"},
+                                    status=status.HTTP_200_OK)
+                else:
+                    return Response({"status": '400', 'message': 'Not enough balance to perform transaction'},
+                                    status=status.HTTP_400_BAD_REQUEST)
+            except Token.DoesNotExist:
+                return Response({'error': 'Token does not exist.'}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({'error': 'Invalid Header Provided.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 @api_view(['POST'])
@@ -982,205 +982,205 @@ def admin_initiate_mtn_transaction(request):
             return Response({'error': 'Invalid Header Provided.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# @authentication_classes([BearerTokenAuthentication])
-# def initiate_ishare_transaction(request):
-#     authorization_header = request.headers.get('Authorization')
-#     if authorization_header:
-#         auth_type, token = authorization_header.split(' ')
-#         if auth_type == 'Bearer':
-#             try:
-#
-#                 receiver = request.data.get('receiver')
-#                 print(receiver)
-#                 data_volume = request.data.get('data_volume')
-#                 print(data_volume)
-#                 reference = request.data.get('reference')
-#                 amount = request.data.get('amount')
-#                 # phone_number = request.data.get('phone_number')
-#                 # channel = request.data.get('channel')
-#                 # txn_type = request.data.get('txn_type')
-#                 # txn_status = request.data.get('txn_status')
-#                 # paid_at = request.data.get('paid_at')
-#                 # ishare_balance = request.data.get('ishare_balance')
-#                 # color_code = request.data.get('color_code')
-#                 # data_break_down = request.data.get('data_break_down')
-#                 # image = request.data.get('image')
-#
-#                 if models.Blacklist.objects.filter(phone_number=str(receiver)).exists():
-#                     return Response({'message': 'Invalid Recipient.'},
-#                                     status=status.HTTP_400_BAD_REQUEST)
-#
-#                 if not receiver or not data_volume or not reference or not amount:
-#                     return Response({'message': 'Body parameters not valid. Check and try again.'},
-#                                     status=status.HTTP_400_BAD_REQUEST)
-#
-#                 token_obj = Token.objects.get(key=token)
-#                 user = token_obj.user
-#                 user_id = user.user_id
-#
-#                 date = datetime.datetime.now().strftime("%a, %b %d, %Y")
-#                 time = datetime.datetime.now().strftime("%I:%M:%S %p")
-#                 date_and_time = datetime.datetime.now().isoformat()
-#
-#                 if "wallet" == "wallet":
-#                     try:
-#                         enough_balance = check_user_at_balance_against_price(user_id, data_volume)
-#                     except:
-#                         return Response(
-#                             {'code': '0001', 'message': f'User ID does not exist: User ID provided: {user_id}.'},
-#                             status=status.HTTP_400_BAD_REQUEST)
-#                 else:
-#                     enough_balance = True
-#                     print("not wallet")
-#                 print(enough_balance)
-#                 if enough_balance:
-#                     user_details = get_user_details(user_id)
-#                     email = user_details['email']
-#                     print(enough_balance)
-#                     # hist = history_web.collection(email).document(date_and_time)
-#                     # doc = hist.get()
-#                     # if doc.exists:
-#                     #     return redirect(f"https://{callback_url}")
-#                     # else:
-#                     #     print("no record found")
-#                     if "wallet" == "wallet":
-#                         user = get_user_details(user_id)
-#                         if user is None:
-#                             return None
-#                         previous_user_wallet = user['at_balance']
-#                         print(f"previous wallet: {previous_user_wallet}")
-#                         new_balance = float(previous_user_wallet) - float(data_volume)
-#                         print(f"new_balance:{new_balance}")
-#                         doc_ref = user_collection.document(user_id)
-#                         doc_ref.update({'at_balance': new_balance})
-#                         user = get_user_details(user_id)
-#                         new_user_wallet = user['at_balance']
-#                         print(f"new_user_wallet: {new_user_wallet}")
-#                         if new_user_wallet == previous_user_wallet:
-#                             user = get_user_details(user_id)
-#                             if user is None:
-#                                 return None
-#                             previous_user_wallet = user['at_balance']
-#                             print(f"previous wallet: {previous_user_wallet}")
-#                             new_balance = float(previous_user_wallet) - float(data_volume)
-#                             print(f"new_balance:{new_balance}")
-#                             doc_ref = user_collection.document(user_id)
-#                             doc_ref.update({'at_balance': new_balance})
-#                             user = get_user_details(user_id)
-#                             new_user_wallet = user['at_balance']
-#                             print(f"new_user_wallet: {new_user_wallet}")
-#                         else:
-#                             print("it's fine")
-#                     ishare_response = send_and_save_to_history(user_id, float(data_volume), reference,
-#                                                                float(amount), receiver,
-#                                                                date, time,
-#                                                                date_and_time)
-#                     print(ishare_response.status_code)
-#                     if ishare_response.status_code == 401:
-#                         return Response(
-#                             data={'status_code': ishare_response.status_code, "message": "Authorization Failed"},
-#                             status=status.HTTP_400_BAD_REQUEST)
-#                     data = ishare_response.json()
-#                     try:
-#                         print("entered the try")
-#                         batch_id = data["batchId"]
-#                         print("batch id")
-#                     except KeyError:
-#                         print("key error")
-#                         return Response(
-#                             data={'status_code': ishare_response.status_code, "message": "Transaction Failed"},
-#                             status=status.HTTP_400_BAD_REQUEST)
-#                     print(data["batchId"])
-#                     status_code = ishare_response.status_code
-#                     if batch_id is None:
-#                         print("batch id was none")
-#                         return Response(data={'status_code': status_code, "message": "Transaction Failed"},
-#                                         status=status.HTTP_400_BAD_REQUEST)
-#
-#                     sms = f"Your account has been credited with {data_volume}MB."
-#                     r_sms_url = f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=UmpEc1JzeFV4cERKTWxUWktqZEs&to={receiver}&from=CloudHub GH&sms={sms}"
-#                     response = requests.request("GET", url=r_sms_url)
-#                     print(response.text)
-#                     doc_ref = history_collection.document(date_and_time)
-#                     doc_ref.update({'done': 'Successful'})
-#                     mail_doc_ref = mail_collection.document(f"{batch_id}-Mail")
-#                     file_path = 'business_api/mail.txt'  # Replace with your file path
-#
-#                     name = user["first name"]
-#                     volume = data_volume
-#                     date = date_and_time
-#                     reference_t = reference
-#                     receiver_t = receiver
-#
-#                     with open(file_path, 'r') as file:
-#                         html_content = file.read()
-#
-#                     placeholders = {
-#                         '{name}': name,
-#                         '{volume}': volume,
-#                         '{date}': date,
-#                         '{reference}': reference_t,
-#                         '{receiver}': receiver_t
-#                     }
-#
-#                     for placeholder, value in placeholders.items():
-#                         html_content = html_content.replace(placeholder, str(value))
-#
-#                     mail_doc_ref.set({
-#                         'to': email,
-#                         'message': {
-#                             'subject': 'AT Flexi Bundle',
-#                             'html': html_content,
-#                             'messageId': 'CloudHub GH'
-#                         }
-#                     })
-#
-#                     # tot = user_collection.document(user_id)
-#                     # print(tot.get().to_dict())
-#                     # try:
-#                     #     print(tot.get().to_dict()['at_total_sales'])
-#                     #     previous_sale = tot.get().to_dict()['at_total_sales']
-#                     #     print(f"Previous Sale: {previous_sale}")
-#                     #     new_sale = float(previous_sale) + float(amount)
-#                     #     print(new_sale)
-#                     #     user_collection.document(user_id).update({'at_total_sales': new_sale})
-#                     # except:
-#                     #     user_collection.document(user_id).update({'at_total_sales': amount})
-#
-#                     # tat = cashback_collection.document(user_id)
-#                     # print(tat.get().to_dict())
-#                     #
-#                     # try:
-#                     #     previous_cashback = tat.get().to_dict()['cashback_wallet']
-#                     #     print(previous_cashback)
-#                     #     cashback_balance = (0.5 / 100) * float(amount)
-#                     #     print(cashback_balance)
-#                     #     new_cashback = float(previous_cashback) + float(cashback_balance)
-#                     #     print(new_cashback)
-#                     #     cashback_collection.document(user_id).update(
-#                     #         {'cashback_wallet': new_cashback, 'phone_number': user_details['phone']})
-#                     #
-#                     # except TypeError as e:
-#                     #     print(e)
-#                     #     cashback_balance = (0.5 / 100) * float(amount)
-#                     #     print(cashback_balance)
-#                     #     cashback_collection.document(user_id).set(
-#                     #         {'cashback_wallet': cashback_balance, 'phone_number': user_details['phone']})
-#                     #
-#                     #     print(cashback_collection.document(user_id).get().to_dict())
-#                     #     print("did")
-#
-#                     return Response(data={'status_code': status_code, 'batch_id': batch_id},
-#                                     status=status.HTTP_200_OK)
-#                 else:
-#                     return Response(data={'status_code': 400, "message": "Not enough balance"},
-#                                     status=status.HTTP_400_BAD_REQUEST)
-#             except Token.DoesNotExist:
-#                 return Response({'error': 'Token does not exist.'}, status=status.HTTP_401_UNAUTHORIZED)
-#         else:
-#             return Response({'error': 'Invalid Header Provided.'}, status=status.HTTP_401_UNAUTHORIZED)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([BearerTokenAuthentication])
+def initiate_ishare_transaction(request):
+    authorization_header = request.headers.get('Authorization')
+    if authorization_header:
+        auth_type, token = authorization_header.split(' ')
+        if auth_type == 'Bearer':
+            try:
+
+                receiver = request.data.get('receiver')
+                print(receiver)
+                data_volume = request.data.get('data_volume')
+                print(data_volume)
+                reference = request.data.get('reference')
+                amount = request.data.get('amount')
+                # phone_number = request.data.get('phone_number')
+                # channel = request.data.get('channel')
+                # txn_type = request.data.get('txn_type')
+                # txn_status = request.data.get('txn_status')
+                # paid_at = request.data.get('paid_at')
+                # ishare_balance = request.data.get('ishare_balance')
+                # color_code = request.data.get('color_code')
+                # data_break_down = request.data.get('data_break_down')
+                # image = request.data.get('image')
+
+                if models.Blacklist.objects.filter(phone_number=str(receiver)).exists():
+                    return Response({'message': 'Invalid Recipient.'},
+                                    status=status.HTTP_400_BAD_REQUEST)
+
+                if not receiver or not data_volume or not reference or not amount:
+                    return Response({'message': 'Body parameters not valid. Check and try again.'},
+                                    status=status.HTTP_400_BAD_REQUEST)
+
+                token_obj = Token.objects.get(key=token)
+                user = token_obj.user
+                user_id = user.user_id
+
+                date = datetime.datetime.now().strftime("%a, %b %d, %Y")
+                time = datetime.datetime.now().strftime("%I:%M:%S %p")
+                date_and_time = datetime.datetime.now().isoformat()
+
+                if "wallet" == "wallet":
+                    try:
+                        enough_balance = check_user_at_balance_against_price(user_id, data_volume)
+                    except:
+                        return Response(
+                            {'code': '0001', 'message': f'User ID does not exist: User ID provided: {user_id}.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    enough_balance = True
+                    print("not wallet")
+                print(enough_balance)
+                if enough_balance:
+                    user_details = get_user_details(user_id)
+                    email = user_details['email']
+                    print(enough_balance)
+                    # hist = history_web.collection(email).document(date_and_time)
+                    # doc = hist.get()
+                    # if doc.exists:
+                    #     return redirect(f"https://{callback_url}")
+                    # else:
+                    #     print("no record found")
+                    if "wallet" == "wallet":
+                        user = get_user_details(user_id)
+                        if user is None:
+                            return None
+                        previous_user_wallet = user['at_balance']
+                        print(f"previous wallet: {previous_user_wallet}")
+                        new_balance = float(previous_user_wallet) - float(data_volume)
+                        print(f"new_balance:{new_balance}")
+                        doc_ref = user_collection.document(user_id)
+                        doc_ref.update({'at_balance': new_balance})
+                        user = get_user_details(user_id)
+                        new_user_wallet = user['at_balance']
+                        print(f"new_user_wallet: {new_user_wallet}")
+                        if new_user_wallet == previous_user_wallet:
+                            user = get_user_details(user_id)
+                            if user is None:
+                                return None
+                            previous_user_wallet = user['at_balance']
+                            print(f"previous wallet: {previous_user_wallet}")
+                            new_balance = float(previous_user_wallet) - float(data_volume)
+                            print(f"new_balance:{new_balance}")
+                            doc_ref = user_collection.document(user_id)
+                            doc_ref.update({'at_balance': new_balance})
+                            user = get_user_details(user_id)
+                            new_user_wallet = user['at_balance']
+                            print(f"new_user_wallet: {new_user_wallet}")
+                        else:
+                            print("it's fine")
+                    ishare_response = send_and_save_to_history(user_id, float(data_volume), reference,
+                                                               float(amount), receiver,
+                                                               date, time,
+                                                               date_and_time)
+                    print(ishare_response.status_code)
+                    if ishare_response.status_code == 401:
+                        return Response(
+                            data={'status_code': ishare_response.status_code, "message": "Authorization Failed"},
+                            status=status.HTTP_400_BAD_REQUEST)
+                    data = ishare_response.json()
+                    try:
+                        print("entered the try")
+                        batch_id = data["batchId"]
+                        print("batch id")
+                    except KeyError:
+                        print("key error")
+                        return Response(
+                            data={'status_code': ishare_response.status_code, "message": "Transaction Failed"},
+                            status=status.HTTP_400_BAD_REQUEST)
+                    print(data["batchId"])
+                    status_code = ishare_response.status_code
+                    if batch_id is None:
+                        print("batch id was none")
+                        return Response(data={'status_code': status_code, "message": "Transaction Failed"},
+                                        status=status.HTTP_400_BAD_REQUEST)
+
+                    sms = f"Your account has been credited with {data_volume}MB."
+                    r_sms_url = f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=UmpEc1JzeFV4cERKTWxUWktqZEs&to={receiver}&from=CloudHub GH&sms={sms}"
+                    response = requests.request("GET", url=r_sms_url)
+                    print(response.text)
+                    doc_ref = history_collection.document(date_and_time)
+                    doc_ref.update({'done': 'Successful'})
+                    mail_doc_ref = mail_collection.document(f"{batch_id}-Mail")
+                    file_path = 'business_api/mail.txt'  # Replace with your file path
+
+                    name = user["first name"]
+                    volume = data_volume
+                    date = date_and_time
+                    reference_t = reference
+                    receiver_t = receiver
+
+                    with open(file_path, 'r') as file:
+                        html_content = file.read()
+
+                    placeholders = {
+                        '{name}': name,
+                        '{volume}': volume,
+                        '{date}': date,
+                        '{reference}': reference_t,
+                        '{receiver}': receiver_t
+                    }
+
+                    for placeholder, value in placeholders.items():
+                        html_content = html_content.replace(placeholder, str(value))
+
+                    mail_doc_ref.set({
+                        'to': email,
+                        'message': {
+                            'subject': 'AT Flexi Bundle',
+                            'html': html_content,
+                            'messageId': 'CloudHub GH'
+                        }
+                    })
+
+                    # tot = user_collection.document(user_id)
+                    # print(tot.get().to_dict())
+                    # try:
+                    #     print(tot.get().to_dict()['at_total_sales'])
+                    #     previous_sale = tot.get().to_dict()['at_total_sales']
+                    #     print(f"Previous Sale: {previous_sale}")
+                    #     new_sale = float(previous_sale) + float(amount)
+                    #     print(new_sale)
+                    #     user_collection.document(user_id).update({'at_total_sales': new_sale})
+                    # except:
+                    #     user_collection.document(user_id).update({'at_total_sales': amount})
+
+                    # tat = cashback_collection.document(user_id)
+                    # print(tat.get().to_dict())
+                    #
+                    # try:
+                    #     previous_cashback = tat.get().to_dict()['cashback_wallet']
+                    #     print(previous_cashback)
+                    #     cashback_balance = (0.5 / 100) * float(amount)
+                    #     print(cashback_balance)
+                    #     new_cashback = float(previous_cashback) + float(cashback_balance)
+                    #     print(new_cashback)
+                    #     cashback_collection.document(user_id).update(
+                    #         {'cashback_wallet': new_cashback, 'phone_number': user_details['phone']})
+                    #
+                    # except TypeError as e:
+                    #     print(e)
+                    #     cashback_balance = (0.5 / 100) * float(amount)
+                    #     print(cashback_balance)
+                    #     cashback_collection.document(user_id).set(
+                    #         {'cashback_wallet': cashback_balance, 'phone_number': user_details['phone']})
+                    #
+                    #     print(cashback_collection.document(user_id).get().to_dict())
+                    #     print("did")
+
+                    return Response(data={'status_code': status_code, 'batch_id': batch_id},
+                                    status=status.HTTP_200_OK)
+                else:
+                    return Response(data={'status_code': 400, "message": "Not enough balance"},
+                                    status=status.HTTP_400_BAD_REQUEST)
+            except Token.DoesNotExist:
+                return Response({'error': 'Token does not exist.'}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({'error': 'Invalid Header Provided.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 @api_view(['POST'])
@@ -1459,148 +1459,148 @@ def get_user_token(request):
         return Response({'message': 'User ID parameter is missing.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# @authentication_classes([BearerTokenAuthentication])
-# def initiate_big_time(request):
-#     authorization_header = request.headers.get('Authorization')
-#     if authorization_header:
-#         auth_type, token = authorization_header.split(' ')
-#         if auth_type == 'Bearer':
-#             try:
-#                 token_obj = Token.objects.get(key=token)
-#                 user = token_obj.user
-#                 user_id = user.user_id
-#                 print(user_id)
-#
-#                 print("hiiiii")
-#
-#                 prices_dict = {
-#                     30000: 80,
-#                     40000: 100,
-#                     50000: 120,
-#                     80000: 200,
-#                     100000: 230,
-#                     200000: 450,
-#                 }
-#
-#                 receiver = request.data.get('receiver')
-#                 print(receiver)
-#                 data_volume = request.data.get('data_volume')
-#                 reference = request.data.get('reference')
-#                 print(data_volume, reference)
-#
-#                 if models.Blacklist.objects.filter(phone_number=str(receiver)).exists():
-#                     return Response({'message': 'Invalid Recipient.'},
-#                                     status=status.HTTP_400_BAD_REQUEST)
-#
-#                 try:
-#                     amount = prices_dict[data_volume]
-#                     print(amount)
-#                 except KeyError:
-#                     print("key error")
-#                     return Response({'message': 'Check data volume parameter and try again.'},
-#                                     status=status.HTTP_400_BAD_REQUEST)
-#                 print(amount)
-#                 # phone_number = request.data.get('phone_number')
-#
-#                 print("yo")
-#
-#                 if "wallet" == "wallet":
-#                     print("used this")
-#                     try:
-#                         enough_balance = check_user_balance_against_price(user_id, amount)
-#                     except:
-#                         return Response(
-#                             {'code': '0001', 'message': f'User ID does not exist: User ID provided: {user_id}.'},
-#                             status=status.HTTP_400_BAD_REQUEST)
-#                 else:
-#                     enough_balance = True
-#                     print("not wallet")
-#                 print(enough_balance)
-#                 if enough_balance:
-#
-#                     if not receiver or not data_volume or not reference or not amount:
-#                         return Response({'message': 'Body parameters not valid. Check and try again.'},
-#                                         status=status.HTTP_400_BAD_REQUEST)
-#
-#                     print("got here")
-#                     user_details = get_user_details(user_id)
-#                     print(user_details['first name'])
-#
-#                     date = datetime.datetime.now().strftime("%a, %b %d, %Y")
-#                     time = datetime.datetime.now().strftime("%I:%M:%S %p")
-#                     date_and_time = datetime.datetime.now().isoformat()
-#
-#                     if user_details is not None:
-#                         print("yes")
-#                         first_name = user_details['first name']
-#                         print(first_name)
-#                         last_name = user_details['last name']
-#                         print(last_name)
-#                         email = user_details['email']
-#                         phone = user_details['phone']
-#                     else:
-#                         first_name = ""
-#                         last_name = ""
-#                         email = ""
-#                         phone = ""
-#                     details = {
-#                         'first_name': first_name,
-#                         'last_name': last_name,
-#                         'email': email,
-#                         'user_id': user_id
-#                     }
-#                     big_time_response = big_time_transaction(receiver=receiver, date_and_time=date_and_time, date=date,
-#                                                              time=time, amount=amount, data_volume=data_volume,
-#                                                              channel="MoMo", phone=phone, ref=reference,
-#                                                              details=details, txn_status="Undelivered", user_id=user_id)
-#                     if big_time_response.status_code == 200 or big_time_response.data["code"] == "0000":
-#                         if "wallet" == "wallet":
-#                             print("updated")
-#                             user = get_user_details(user_id)
-#                             if user is None:
-#                                 return None
-#                             previous_user_wallet = user['wallet']
-#                             print(f"previous wallet: {previous_user_wallet}")
-#                             new_balance = float(previous_user_wallet) - float(amount)
-#                             print(f"new_balance:{new_balance}")
-#                             doc_ref = user_collection.document(user_id)
-#                             doc_ref.update({'wallet': new_balance})
-#                             user = get_user_details(user_id)
-#                             new_user_wallet = user['wallet']
-#                             print(f"new_user_wallet: {new_user_wallet}")
-#                             if new_user_wallet == previous_user_wallet:
-#                                 user = get_user_details(user_id)
-#                                 if user is None:
-#                                     return None
-#                                 previous_user_wallet = user['wallet']
-#                                 print(f"previous wallet: {previous_user_wallet}")
-#                                 new_balance = float(previous_user_wallet) - float(amount)
-#                                 print(f"new_balance:{new_balance}")
-#                                 doc_ref = user_collection.document(user_id)
-#                                 doc_ref.update({'wallet': new_balance})
-#                                 user = get_user_details(user_id)
-#                                 new_user_wallet = user['wallet']
-#                                 print(f"new_user_wallet: {new_user_wallet}")
-#                             else:
-#                                 print("it's fine")
-#                         return Response(data={"status": "200", "message": "Transaction received successfully"},
-#                                         status=status.HTTP_200_OK)
-#                     else:
-#                         return Response({"status": 400, "message": "Insufficient balance"},
-#                                         status=status.HTTP_400_BAD_REQUEST)
-#                 else:
-#                     return Response({"status": '400', 'message': 'Something went wrong'},
-#                                     status=status.HTTP_400_BAD_REQUEST)
-#             except Exception as e:
-#                 print(e)
-#                 return Response({"status": '400', 'message': f'Something went wrong: {e}'},
-#                                 status=status.HTTP_400_BAD_REQUEST)
-#         else:
-#             return Response({'error': 'Invalid Header Provided.'}, status=status.HTTP_401_UNAUTHORIZED)
-#     else:
-#         return Response({'error': 'Invalid Header Provided.'}, status=status.HTTP_401_UNAUTHORIZED)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([BearerTokenAuthentication])
+def initiate_big_time(request):
+    authorization_header = request.headers.get('Authorization')
+    if authorization_header:
+        auth_type, token = authorization_header.split(' ')
+        if auth_type == 'Bearer':
+            try:
+                token_obj = Token.objects.get(key=token)
+                user = token_obj.user
+                user_id = user.user_id
+                print(user_id)
+
+                print("hiiiii")
+
+                prices_dict = {
+                    30000: 80,
+                    40000: 100,
+                    50000: 120,
+                    80000: 200,
+                    100000: 230,
+                    200000: 450,
+                }
+
+                receiver = request.data.get('receiver')
+                print(receiver)
+                data_volume = request.data.get('data_volume')
+                reference = request.data.get('reference')
+                print(data_volume, reference)
+
+                if models.Blacklist.objects.filter(phone_number=str(receiver)).exists():
+                    return Response({'message': 'Invalid Recipient.'},
+                                    status=status.HTTP_400_BAD_REQUEST)
+
+                try:
+                    amount = prices_dict[data_volume]
+                    print(amount)
+                except KeyError:
+                    print("key error")
+                    return Response({'message': 'Check data volume parameter and try again.'},
+                                    status=status.HTTP_400_BAD_REQUEST)
+                print(amount)
+                # phone_number = request.data.get('phone_number')
+
+                print("yo")
+
+                if "wallet" == "wallet":
+                    print("used this")
+                    try:
+                        enough_balance = check_user_balance_against_price(user_id, amount)
+                    except:
+                        return Response(
+                            {'code': '0001', 'message': f'User ID does not exist: User ID provided: {user_id}.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    enough_balance = True
+                    print("not wallet")
+                print(enough_balance)
+                if enough_balance:
+
+                    if not receiver or not data_volume or not reference or not amount:
+                        return Response({'message': 'Body parameters not valid. Check and try again.'},
+                                        status=status.HTTP_400_BAD_REQUEST)
+
+                    print("got here")
+                    user_details = get_user_details(user_id)
+                    print(user_details['first name'])
+
+                    date = datetime.datetime.now().strftime("%a, %b %d, %Y")
+                    time = datetime.datetime.now().strftime("%I:%M:%S %p")
+                    date_and_time = datetime.datetime.now().isoformat()
+
+                    if user_details is not None:
+                        print("yes")
+                        first_name = user_details['first name']
+                        print(first_name)
+                        last_name = user_details['last name']
+                        print(last_name)
+                        email = user_details['email']
+                        phone = user_details['phone']
+                    else:
+                        first_name = ""
+                        last_name = ""
+                        email = ""
+                        phone = ""
+                    details = {
+                        'first_name': first_name,
+                        'last_name': last_name,
+                        'email': email,
+                        'user_id': user_id
+                    }
+                    big_time_response = big_time_transaction(receiver=receiver, date_and_time=date_and_time, date=date,
+                                                             time=time, amount=amount, data_volume=data_volume,
+                                                             channel="MoMo", phone=phone, ref=reference,
+                                                             details=details, txn_status="Undelivered", user_id=user_id)
+                    if big_time_response.status_code == 200 or big_time_response.data["code"] == "0000":
+                        if "wallet" == "wallet":
+                            print("updated")
+                            user = get_user_details(user_id)
+                            if user is None:
+                                return None
+                            previous_user_wallet = user['wallet']
+                            print(f"previous wallet: {previous_user_wallet}")
+                            new_balance = float(previous_user_wallet) - float(amount)
+                            print(f"new_balance:{new_balance}")
+                            doc_ref = user_collection.document(user_id)
+                            doc_ref.update({'wallet': new_balance})
+                            user = get_user_details(user_id)
+                            new_user_wallet = user['wallet']
+                            print(f"new_user_wallet: {new_user_wallet}")
+                            if new_user_wallet == previous_user_wallet:
+                                user = get_user_details(user_id)
+                                if user is None:
+                                    return None
+                                previous_user_wallet = user['wallet']
+                                print(f"previous wallet: {previous_user_wallet}")
+                                new_balance = float(previous_user_wallet) - float(amount)
+                                print(f"new_balance:{new_balance}")
+                                doc_ref = user_collection.document(user_id)
+                                doc_ref.update({'wallet': new_balance})
+                                user = get_user_details(user_id)
+                                new_user_wallet = user['wallet']
+                                print(f"new_user_wallet: {new_user_wallet}")
+                            else:
+                                print("it's fine")
+                        return Response(data={"status": "200", "message": "Transaction received successfully"},
+                                        status=status.HTTP_200_OK)
+                    else:
+                        return Response({"status": 400, "message": "Insufficient balance"},
+                                        status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({"status": '400', 'message': 'Something went wrong'},
+                                    status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e:
+                print(e)
+                return Response({"status": '400', 'message': f'Something went wrong: {e}'},
+                                status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'error': 'Invalid Header Provided.'}, status=status.HTTP_401_UNAUTHORIZED)
+    else:
+        return Response({'error': 'Invalid Header Provided.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 @api_view(['POST'])
