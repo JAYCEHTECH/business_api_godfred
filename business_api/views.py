@@ -1230,8 +1230,12 @@ def admin_initiate_ishare_transaction(request):
                 # image = request.data.get('image')
 
                 print(receiver)
+                print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
                 for i in models.Blacklist.objects.all():
                     print(i)
+                    if str(i) == str(receiver):
+                        return Response({'message': 'Invalid Recipient.'},
+                                        status=status.HTTP_400_BAD_REQUEST)
                 if models.Blacklist.objects.filter(phone_number=str(receiver)).exists():
                     return Response({'message': 'Invalid Recipient.'},
                                     status=status.HTTP_400_BAD_REQUEST)
@@ -1651,6 +1655,14 @@ def admin_initiate_big_time(request):
                 user_id = request.data.get('user_id')
                 passed_amount = request.data.get('amount')
                 print(data_volume, reference)
+
+                print(receiver)
+                print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+                for i in models.Blacklist.objects.all():
+                    print(i)
+                    if str(i) == str(receiver):
+                        return Response({'message': 'Invalid Recipient.'},
+                                        status=status.HTTP_400_BAD_REQUEST)
 
                 if models.Blacklist.objects.filter(phone_number=str(receiver)).exists():
                     return Response({'message': 'Invalid Recipient.'},
