@@ -10,9 +10,9 @@ urlpatterns = [
     path('regenerate_token', views.regenerate_token, name='regenerate_token'),
     path('get_user_token', views.get_user_token, name='get_user_token'),
 
-    path('api/initiate_mtn', views.initiate_mtn_transaction, name='initiate_mtn_transaction'),
-    path('api/initiate_ishare', views.initiate_ishare_transaction, name='ishare_transaction'),
-    path('api/initiate_big_time', views.initiate_big_time, name='big_time'),
+    # path('api/initiate_mtn', views.initiate_mtn_transaction, name='initiate_mtn_transaction'),
+    # path('api/initiate_ishare', views.initiate_ishare_transaction, name='ishare_transaction'),
+    # path('api/initiate_big_time', views.initiate_big_time, name='big_time'),
     path('api/initiate_wallet_topup', views.wallet_topup, name='wallet_topup'),
 
     path('hubtel_webhook', views.hubtel_webhook, name='hubtel_webhook'),
