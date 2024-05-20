@@ -741,7 +741,6 @@ def admin_initiate_mtn_transaction(request):
                                     status=status.HTTP_400_BAD_REQUEST)
 
                 receiver = request.data.get('receiver')
-                print(receiver)
                 data_volume = request.data.get('data_volume')
                 print(data_volume)
                 reference = request.data.get('reference')
@@ -752,6 +751,9 @@ def admin_initiate_mtn_transaction(request):
                 print(receiver)
                 for i in models.Blacklist.objects.all():
                     print(i)
+                    if str(i) == str(receiver):
+                        return Response({'message': 'Invalid Recipient.'},
+                                        status=status.HTTP_400_BAD_REQUEST)
                 if models.Blacklist.objects.filter(phone_number=str(receiver)).exists():
                     return Response({'message': 'Invalid Recipient.'},
                                     status=status.HTTP_400_BAD_REQUEST)
