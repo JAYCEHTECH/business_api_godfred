@@ -749,6 +749,7 @@ def admin_initiate_mtn_transaction(request):
                 # phone_number = request.data.get('phone_number')
 
                 print(receiver)
+                print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
                 for i in models.Blacklist.objects.all():
                     print(i)
                     if str(i) == str(receiver):
