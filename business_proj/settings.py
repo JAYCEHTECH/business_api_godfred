@@ -32,7 +32,9 @@ ALLOWED_HOSTS = [
     'api-u5n23.ondigitalocean.app',
     'api.cloudhubgh.com',
     'localhost',
-    '127.0.0.1'
+    '127.0.0.1',
+    'alt2.cloudhubgh.com',
+    'alt.cloudhubgh.com'
 ]
 
 
@@ -83,7 +85,9 @@ CORS_ALLOWED_ORIGINS = [  # Replace with your allowed domain(s)
     'https://www.cloudhubgh.com',
     'https://reseller.cloudhubgh.com',
     'https://merchant-wvwod.ondigitalocean.app',
-    "https://api.cloudhubgh.com"
+    "https://api.cloudhubgh.com",
+    "https://alt.cloudhubgh.com",
+    "https://alt2.cloudhubgh.com"
 ]
 
 CORS_ALLOW_METHODS = [
