@@ -34,7 +34,8 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'alt2.cloudhubgh.com',
-    'alt.cloudhubgh.com'
+    'alt.cloudhubgh.com',
+    'apii-23wrh.ondigitalocean.app'
 ]
 
 # Application definition
