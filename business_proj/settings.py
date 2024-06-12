@@ -37,8 +37,6 @@ ALLOWED_HOSTS = [
     'alt.cloudhubgh.com'
 ]
 
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -66,7 +64,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 
 CORS_ALLOWED_ORIGINS = [  # Replace with your allowed domain(s)
     'https://test.bestpaygh.com',
@@ -228,4 +225,3 @@ FIREBASE_ADMIN_CERT = {
     "client_x509_cert_url": config('client_x509_cert_url'),
     "universe_domain": "googleapis.com"
 }
-
